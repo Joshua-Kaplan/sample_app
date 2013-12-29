@@ -1,0 +1,8 @@
+<li>
+	<%= gravatar_for user, size: 52 %>
+	<%= link_to user.name, user %><br>
+	<%= mail_to user.email,  name="Send Email", bcc: "ylkaplan@gmail.com", subject: "Message from #{current_user.name} on Sample App" %>
+	<% if current_user.admin? && !current_user?(user) %>
+		| <%= link_to "delete", user, method: :delete, data: { confirm: "Delete this user?" } %>
+	<% end %>
+</li>	
