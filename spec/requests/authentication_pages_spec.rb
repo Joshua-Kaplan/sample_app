@@ -18,6 +18,7 @@ describe "Authentication" do
 
 	  		it { should have_title('Sign in') }
 	  		it { should have_error_message('incorrect') }
+        it { should_not have_link('Profile') }
 
 	  		describe "after visiting another page" do
 	  			before { click_link "Home" }
@@ -81,6 +82,19 @@ describe "Authentication" do
   					it { should have_title('Sign in') }
   				end
   			end
+
+        describe "in the microposts controller" do
+          
+          describe "submitting to the create page" do
+            before { post microposts_path }
+            specify { expect(response).to redirect_to(signin_path) }
+          end
+
+          describe "submitting to the destroy action" do
+            before { delete micropost_path(FactoryGirl.create(:micropost)) }
+            specify { expect(response).to redirect_to(signin_path) }
+          end
+        end
   		end
 
   		describe "as wrong user" do
@@ -94,10 +108,10 @@ describe "Authentication" do
   				specify { expect(response).to redirect_to(root_url) }
   			end
 
-			describe "submitting a PATCH request to the Users#update action" do
-				before { patch user_path(wrong_user) }
-				specify { expect(response).to redirect_to(root_url) }
-			end
+  			describe "submitting a PATCH request to the Users#update action" do
+  				before { patch user_path(wrong_user) }
+  				specify { expect(response).to redirect_to(root_url) }
+  			end
   		end
   	end
 end
